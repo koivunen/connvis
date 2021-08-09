@@ -1,284 +1,119 @@
+
 {
+  "containing": "all", 
+  "link_count": 11, 
   "links": [
     {
       "source": ".142", 
-      "target": "*nelonenmedia.fi", 
+      "target": "GOOGLE", 
       "value": 1
     }, 
     {
       "source": ".142", 
-      "target": "bootstrapcdn.com", 
+      "target": "sanoma-sndp.fi", 
       "value": 1
     }, 
     {
       "source": ".142", 
-      "target": "doubleclick.net", 
+      "target": "is.fi", 
       "value": 1
     }, 
     {
       "source": ".142", 
-      "target": "casalemedia.com", 
+      "target": "speedcurve.com", 
       "value": 1
     }, 
     {
       "source": ".142", 
-      "target": "crwdcntrl.net", 
+      "target": "chartbeat.net", 
       "value": 1
     }, 
     {
       "source": ".142", 
-      "target": "openx.net", 
+      "target": "*gstatic.com", 
       "value": 1
     }, 
     {
       "source": ".142", 
-      "target": "tapad.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".142", 
-      "target": "liadm.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".142", 
-      "target": "demdex.net", 
-      "value": 1
-    }, 
-    {
-      "source": ".142", 
-      "target": "360yield.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".142", 
-      "target": "cintnetworks.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".142", 
-      "target": "stickyadstv.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".142", 
-      "target": "creative-serving.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".142", 
-      "target": "*dnt-userreport.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".142", 
-      "target": "nelonenmedia.fi", 
-      "value": 1
-    }, 
-    {
-      "source": ".142", 
-      "target": "adnxs.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".142", 
-      "target": "dnt-userreport.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "rubiconproject.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "adnxs.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "everesttech.net", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "fiftyt.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "userreport.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "glimr.io", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "brandmetrics.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "facebook.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "ad4m.at", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "tribalfusion.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "audrte.com", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "loopme.me", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "erne.co", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "playground.xyz", 
-      "value": 1
-    }, 
-    {
-      "source": ".143", 
-      "target": "polyfill.io", 
+      "target": "192.168.0.1", 
       "value": 1
     }, 
     {
       "source": ".144", 
-      "target": "adnxs.com", 
-      "value": 1
+      "target": "GOOGLE", 
+      "value": 1,
+      "color": "rgb(255,22,244)"
     }, 
     {
       "source": ".144", 
       "target": "Telegram Messenger Inc", 
       "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "GOOGLE", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "chartbeat.net", 
+      "value": 1
     }
   ], 
   "nodes": [
     {
-      "id": ".142"
+      "id": ".142", 
+      "title": ".142"
     }, 
     {
-      "id": "*nelonenmedia.fi"
+      "hitcount": 3, 
+      "id": "GOOGLE", 
+      "title": "GOOGLE (3 laitetta)",
+      "color": "rgb(255,255,0,255)"
     }, 
     {
-      "id": "bootstrapcdn.com"
+      "hitcount": 1, 
+      "id": "sanoma-sndp.fi", 
+      "title": "sanoma-sndp.fi"
     }, 
     {
-      "id": "doubleclick.net"
+      "hitcount": 1, 
+      "id": "is.fi", 
+      "title": "is.fi"
     }, 
     {
-      "id": "casalemedia.com"
+      "hitcount": 1, 
+      "id": "speedcurve.com", 
+      "title": "speedcurve.com"
     }, 
     {
-      "id": "crwdcntrl.net"
+      "hitcount": 2, 
+      "id": "chartbeat.net", 
+      "title": "chartbeat.net (2 laitetta)",
+      "color": "rgb(255,22,244)"
     }, 
     {
-      "id": "openx.net"
+      "hitcount": 1, 
+      "id": "*gstatic.com", 
+      "title": "*gstatic.com"
     }, 
     {
-      "id": "tapad.com"
+      "hitcount": 1, 
+      "id": "192.168.0.1", 
+      "title": "192.168.0.1"
     }, 
     {
-      "id": "liadm.com"
+      "id": ".144", 
+      "title": ".144"
     }, 
     {
-      "id": "demdex.net"
+      "hitcount": 1, 
+      "id": "Telegram Messenger Inc", 
+      "title": "Telegram Messenger Inc"
     }, 
     {
-      "id": "360yield.com"
-    }, 
-    {
-      "id": "cintnetworks.com"
-    }, 
-    {
-      "id": "stickyadstv.com"
-    }, 
-    {
-      "id": "creative-serving.com"
-    }, 
-    {
-      "id": "*dnt-userreport.com"
-    }, 
-    {
-      "id": "nelonenmedia.fi"
-    }, 
-    {
-      "id": "adnxs.com"
-    }, 
-    {
-      "id": "dnt-userreport.com"
-    }, 
-    {
-      "id": ".143"
-    }, 
-    {
-      "id": "rubiconproject.com"
-    }, 
-    {
-      "id": "krxd.net"
-    }, 
-    {
-      "id": "everesttech.net"
-    }, 
-    {
-      "id": "fiftyt.com"
-    }, 
-    {
-      "id": "userreport.com"
-    }, 
-    {
-      "id": "glimr.io"
-    }, 
-    {
-      "id": "brandmetrics.com"
-    }, 
-    {
-      "id": "facebook.com"
-    }, 
-    {
-      "id": "ad4m.at"
-    }, 
-    {
-      "id": "tribalfusion.com"
-    }, 
-    {
-      "id": "audrte.com"
-    }, 
-    {
-      "id": "loopme.me"
-    }, 
-    {
-      "id": "erne.co"
-    }, 
-    {
-      "id": "playground.xyz"
-    }, 
-    {
-      "id": "polyfill.io"
-    }, 
-    {
-      "id": ".144"
-    }, 
-    {
-      "id": "Telegram Messenger Inc"
+      "id": ".143", 
+      "title": ".143"
     }
   ]
 }

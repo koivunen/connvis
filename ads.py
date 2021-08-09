@@ -1,3 +1,4 @@
+from multiprocessing import Value
 import ip2dns,re
 import ipaddress
 
@@ -5,11 +6,41 @@ ips={}
 domains={}
 
 def init():
-	with open("ads.txt", "r") as f:
+	with open("data/ads.txt", "r") as f:
 		for l in f.readlines():
-			ip,domain = l.split()
-			ip2dns.feed(ip,domain)
-			ips[ip]="ad"
-			domains[domain]="ad"
-	
->>> ipaddress.ip_address('192.168.0.1') in ipaddress.ip_network('192.168.0.0/24')
+			try:
+				ip,domain = l.split()
+			except:
+				print("Failed parsing from data/ads.txt: ",l)
+				continue
+			ip=ipaddress.ip_address(ip)
+			ips[int(ip)]="ad" # todo: ad/tracking/malware/???
+			domains[domain]="ad" # todo: ad/tracking/malware/???
+			
+			# TODO: move
+			ip2dns.feed(ip,domain) 
+	with open("data/ads_domainsonly.txt", "r") as f:
+		for domain in f.readlines():
+			domain=domain.strip()
+			if domain and " " not in domain:
+				domains[domain]="ad" # todo: ad/tracking/malware/???
+			
+
+
+def classifyIP(ip):
+	return ips.get(int(ip))
+
+def classifyDomain(domain):
+	assert not isinstance(domain, list),"supply a domain"
+
+	return domains.get(domain)
+
+if __name__ == '__main__':
+	init()
+	for k,v in domains.items():
+		print("domains",k,v)
+		break
+	for k,v in ips.items():
+		print("ips",k,v)
+		break
+	print("get chartbeat",classifyDomain(ip2dns.getByIp(ipaddress.ip_address("174.129.218.62"))))

@@ -6,7 +6,9 @@ var diag = d3.sankeyDiagram()
 	.nodeTitle(function (d) { return d.title || d.id; })
 	.linkColor(function (d) { return d.color || colorGenerator(d.id); })
 	.on("selectNode",function(n){
-		console.log(n);
+		console.log("selectNode",n);
+		if (n&&n.id)
+		window.open("https://www.google.com/search?q="+n.id.replace("*",""));
 	});
 
 function sleep(ms) {
@@ -14,11 +16,17 @@ function sleep(ms) {
 }
 
 async function updateLoop() {
+	var svg = d3.select('#sankey svg');
+
 	while (1) {
+		while (document.getElementById("pausebtn").checked) {
+			await sleep(333);
+		};
 
 		try {
 			let response = await fetch('/sankey.json');
 			var data = await response.json();
+			
 			d3.select('#error').text('');
 			d3.select('#containing').text(data.containing=="purged"?"Vain suosituimmat laitteiden yhteiset kohteet":(data.containing=="all"?"Kaikkien laitteiden kaikki kohteet":"Laitteiden yhteiset kohteet"));
 			d3.select('#link_count').text(data.link_count);
@@ -30,15 +38,28 @@ async function updateLoop() {
 			}
 		} catch (e) {
 			d3.select('#error').text("VIRHE: "+e);
-			return;
+			last_error_data = data;
+			await sleep(3000);
+			continue;
 		}
 
 		//layout.ordering(value.order || null);
-		d3.select('#sankey svg')
-			.datum(layout.scale(null)(data))
+
+		svg.datum(layout.scale(null)(data))
 			.transition()
 			.duration(600)
-			.call(diag);
+			.call(diag)
+			
+		svg.selectAll('.node')
+		.attr('font-weight',"bold")
+		.attr('font-style',"serif")
+		.attr('fill',function(n){
+			return n.ad?"rgb(150,50,0)":"rgb(0,0,0)"
+		}).attr('text-decoration',function(n){
+			return n.ad?"underline":""
+		});
+
+			
 		console.log("updating");
 		await sleep(997);
 	}

@@ -8,6 +8,7 @@ import sys,time,datetime
 
 print("seeding domains")
 import ip2dns; ip2dns.seedFromDnsmasq()
+import ads; ads.init()
 
 print("starting httpd")
 import vishttp; vishttp.run_threaded()
