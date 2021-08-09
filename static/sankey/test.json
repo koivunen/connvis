@@ -1,0 +1,284 @@
+{
+  "links": [
+    {
+      "source": ".142", 
+      "target": "*nelonenmedia.fi", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "bootstrapcdn.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "doubleclick.net", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "casalemedia.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "crwdcntrl.net", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "openx.net", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "tapad.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "liadm.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "demdex.net", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "360yield.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "cintnetworks.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "stickyadstv.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "creative-serving.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "*dnt-userreport.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "nelonenmedia.fi", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "adnxs.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "dnt-userreport.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "rubiconproject.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "adnxs.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "everesttech.net", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "fiftyt.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "userreport.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "glimr.io", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "brandmetrics.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "facebook.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "ad4m.at", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "tribalfusion.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "audrte.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "loopme.me", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "erne.co", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "playground.xyz", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "polyfill.io", 
+      "value": 1
+    }, 
+    {
+      "source": ".144", 
+      "target": "adnxs.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".144", 
+      "target": "Telegram Messenger Inc", 
+      "value": 1
+    }
+  ], 
+  "nodes": [
+    {
+      "id": ".142"
+    }, 
+    {
+      "id": "*nelonenmedia.fi"
+    }, 
+    {
+      "id": "bootstrapcdn.com"
+    }, 
+    {
+      "id": "doubleclick.net"
+    }, 
+    {
+      "id": "casalemedia.com"
+    }, 
+    {
+      "id": "crwdcntrl.net"
+    }, 
+    {
+      "id": "openx.net"
+    }, 
+    {
+      "id": "tapad.com"
+    }, 
+    {
+      "id": "liadm.com"
+    }, 
+    {
+      "id": "demdex.net"
+    }, 
+    {
+      "id": "360yield.com"
+    }, 
+    {
+      "id": "cintnetworks.com"
+    }, 
+    {
+      "id": "stickyadstv.com"
+    }, 
+    {
+      "id": "creative-serving.com"
+    }, 
+    {
+      "id": "*dnt-userreport.com"
+    }, 
+    {
+      "id": "nelonenmedia.fi"
+    }, 
+    {
+      "id": "adnxs.com"
+    }, 
+    {
+      "id": "dnt-userreport.com"
+    }, 
+    {
+      "id": ".143"
+    }, 
+    {
+      "id": "rubiconproject.com"
+    }, 
+    {
+      "id": "krxd.net"
+    }, 
+    {
+      "id": "everesttech.net"
+    }, 
+    {
+      "id": "fiftyt.com"
+    }, 
+    {
+      "id": "userreport.com"
+    }, 
+    {
+      "id": "glimr.io"
+    }, 
+    {
+      "id": "brandmetrics.com"
+    }, 
+    {
+      "id": "facebook.com"
+    }, 
+    {
+      "id": "ad4m.at"
+    }, 
+    {
+      "id": "tribalfusion.com"
+    }, 
+    {
+      "id": "audrte.com"
+    }, 
+    {
+      "id": "loopme.me"
+    }, 
+    {
+      "id": "erne.co"
+    }, 
+    {
+      "id": "playground.xyz"
+    }, 
+    {
+      "id": "polyfill.io"
+    }, 
+    {
+      "id": ".144"
+    }, 
+    {
+      "id": "Telegram Messenger Inc"
+    }
+  ]
+}

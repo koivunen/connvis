@@ -55,7 +55,9 @@ def parse_reply(l):
 		#print("dns swap",dns,"->",origin_domain)
 		dns=origin_domain
 
-	r = {'domain':dns, 'ip':m.group(2)}
+	ip = m.group(2)
+		
+	r = {'domain':dns, 'ip':ip}
 		# Clear if we have a result IP (reply star.c10r.facebook.com is 31.13.72.8)
 
 	if origin_domain and "CNAME" not in result:
@@ -63,26 +65,24 @@ def parse_reply(l):
 	if "CNAME" not in result:
 		return r
 
-import select
-from systemd import journal
 
-j = journal.Reader()
-j.log_level(journal.LOG_INFO)
+if __name__ == '__main__':
+		
+	import select
+	from systemd import journal
 
-# j.add_match(_SYSTEMD_UNIT="systemd-udevd.service")
-j.seek_tail()
-j.get_previous()
-# j.get_next() # it seems this is not necessary.
+	j = journal.Reader()
+	j.log_level(journal.LOG_INFO)
 
-p = select.poll()
-p.register(j, j.get_events())
-
-while p.poll():
-    if j.process() != journal.APPEND:
-        continue
-
-    # Your example code has too many get_next() (i.e, "while j.get_next()" and "for event in j") which cause skipping entry.
-    # Since each iteration of a journal.Reader() object is equal to "get_next()", just do simple iteration.
-    for entry in j:
-        if entry['MESSAGE'] != "":
-            print(str(entry['__REALTIME_TIMESTAMP'] )+ ' ' + entry['MESSAGE'])
+	j.add_match(_SYSTEMD_UNIT="dnsmasq.service")
+	for entry in j:
+		print(entry['__REALTIME_TIMESTAMP'] )
+		import code; code.interact(local=locals())
+		l=entry['MESSAGE']
+		print("\n","TEST:",l)
+		r=parse_reply(l)
+		if r:
+			print("\n\t\t PARSE REPLY ANSWER",r)
+		q = parse_query(l)
+		if q:
+			print("\n\t\t PARSE QUERY ANSWER",q)

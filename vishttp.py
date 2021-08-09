@@ -23,7 +23,23 @@ def index():
 import connections
 @app.route('/ipinfo.json')
 def ipinfo():
-    return jsonify({        "activity": connections.getIPActivity()    })
+    acts = {}
+    
+    for k,v in connections.getIPActivity().items():
+        acts[str(k)]=v
+    return jsonify({        "activity": acts    })
+
+import config
+@app.route('/config.json')
+def config():
+    from config import homenetwork
+    return jsonify({  "homenetwork": str(homenetwork) })
+
+import monitor_domains
+@app.route('/ipdomainquerymappingshort.json')
+def ipdomainquerymappingshort():
+    return jsonify({        "mapping": monitor_domains.getIPQueryMappingShort()    })
+
 
 @app.route('/geo.json')
 def geodata():
@@ -46,33 +62,16 @@ def geodata():
             mimetype='application/json',
             status=200) 
 
+def SankeyProvider():
+    return jsonify({})
+
+def setSankeyProvider(p):
+    global SankeyProvider
+    SankeyProvider=p
 
 @app.route('/sankey.json')
 def sankeyjson():
-    return jsonify({
-        "nodes": [{
-            "id": "101"
-        }, {
-            "id": "102"
-        }, {
-            "id": "103"
-        }, {
-            "id": "104"
-        }, {
-            "id": "105"
-        }, {
-            "id": "106"
-        }, {
-            "id": "107"
-        }, {
-            "id": "1.1.1.1"
-        }],
-        "links": [{
-            "source": "101",
-            "target": "1.1.1.1",
-            "value": 1
-        }]
-    })
+    return jsonify(SankeyProvider())
 
 
 @app.route("/")
@@ -84,9 +83,9 @@ def run(use_reloader=False):
     app.run(debug=True, host='0.0.0.0', use_reloader=use_reloader)
 
 
-if __name__ == "__main__":
-    run(use_reloader=True)
-
 
 def run_threaded():
     threading.Thread(target=run).start()
+
+if __name__ == "__main__":
+    run(use_reloader=True)

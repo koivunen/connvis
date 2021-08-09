@@ -7,7 +7,8 @@ var map = L.map('map', {
         crossOrigin: true,
         type: 'json'
     }, {
-        interval: 1 * 1000
+        interval: 1 * 1000,
+        removeMissing: true
     }).addTo(map);
 
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {

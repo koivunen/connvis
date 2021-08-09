@@ -7,10 +7,24 @@
 
 	<script src="//d3js.org/d3.v4.min.js" charset="utf-8"></script>
 	<script src="d3-sankey-diagram.js" charset="utf-8"></script>
-	<script src="/live.js" charset="utf-8"></script>
-	
+	<style>
+        #sankey {
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 </head>
 <body>
+    <center>
+
+        <div class="error" id="error"></div>
+        <div id="status_containing">
+            Sisältää: <span id="containing"></span>
+        </div>
+        <div id="status_link_count">
+            Kohteita yhteensä: <span id="link_count"></span><span id="link_count_visible_wrap"> (näytetään <span id="link_count_visible"></span>)</span>
+        </div>
+    </center>
     <div class="sankey" id="sankey"><svg width="1280" height="1024" ></svg></div>
     <script src="index.js"></script>
 </body>

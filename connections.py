@@ -3,8 +3,9 @@
 
 from xml.etree.ElementTree import XML
 import xml.dom.minidom
+import queue
 import ipaddress
-
+from multiprocessing import Process, Queue, process
 from Conntrack import ConnectionManager
 import time
 cm = ConnectionManager()
@@ -16,8 +17,11 @@ conns={}
 activeIPs={}
 ipByteTable={}
 ipPacketTable={}
-
+queue=Queue()
 def getHomeIPFromConnection(conn):
+	"""
+	Return source or destination if either one is in home network
+	"""
 	src = conn.get("src")
 	if src and src in homenetwork and src!=homenetwork_broadcast:
 		return src
@@ -27,6 +31,22 @@ def getHomeIPFromConnection(conn):
 
 
 def getConnections():
+	"""
+	Returns connections list:
+	Dict of 'conntrackid': {'bytes': '2519',
+               'bytesIn': '8445',
+               'dport': '443',
+               'dst': IPv4Address('1.2.3.4'),
+               'gone': False,							# Timestamp when the connection was purged from conntrack
+               'id': '623806457',						# conntrackid
+               'lastActivity': 1628534811.1428092,		# last packet received/sent
+               'packets': '12',
+               'packetsIn': '7',
+               'protoname': 'tcp',
+               'sport': '45012',
+               'src': IPv4Address('192.168.0.142'),
+               'state': 'ESTABLISHED'}					# if tcp connection, shows conntrack state
+	"""
 	return conns
 
 def getIPActivity():
@@ -58,18 +78,54 @@ def isHomeDNSConnection(conn):
 	if conn.get("dport")!=53 and conn.get("sport")!=53:
 		return False
 
-	src = vals.get("src")
-	dst = vals.get("dst")
+	src = conn.get("src")
+	dst = conn.get("dst")
 
 	if not src or src not in homenetwork or not dst or dst not in homenetwork:
 		return False
 	
 	return True
 
+def processEntryTable(t):
+	updateConns=[]
+	for vals in t:
+		src = vals.get("src")
+		dst = vals.get("dst")
+		homeip = getHomeIPFromConnection(vals)
+		if homeip and not isHomeDNSConnection(vals):
+			id = vals["id"]
+			updateConns.append(id)
+
+			# Existing, update
+			if id in conns:
+				conn=conns[id]
+				doDiff(conn,vals)
+				for k,v in vals.items():
+					conn[k]=v
+				vals=conn
+				vals["gone"]=False					
+			else: # New, initialie
+				conns[id]=vals
+				vals["gone"]=False
+				now = time.time()
+				vals["lastActivity"]=now
+
+				activeIPs[src]=now
+				activeIPs[dst]=now
+
+
+	for id,conn in conns.items():
+		if id not in updateConns and not conn["gone"]:
+			conn["gone"]=time.time()
+def receiver():
+	while True:
+		t=queue.get()
+		processEntryTable(t)
+
 def read():
 
 	try:
-		updateConns=[]
+		ret=[]
 		for msg in cm.list():
 			#dom = xml.dom.minidom.parseString(msg)
 			#pretty_xml_as_string = dom.toprettyxml()
@@ -78,38 +134,13 @@ def read():
 			msg=XML(msg)
 			#import code; code.interact(local=locals())
 			vals=parse(msg)
-			src = vals.get("src")
-			dst = vals.get("dst")
-			homeip = getHomeIPFromConnection(vals)
-			if homeip and not isHomeDNSConnection(vals):
-				id = vals["id"]
-				updateConns.append(id)
-
-				# Existing, update
-				if id in conns:
-					conn=conns[id]
-					doDiff(conn,vals)
-					for k,v in vals.items():
-						conn[k]=v
-					vals=conn
-					vals["gone"]=False					
-				else: # New, initialie
-					conns[id]=vals
-					vals["gone"]=False
-					now = time.time()
-					vals["lastActivity"]=now
-
-					activeIPs[src]=now
-					activeIPs[dst]=now
-
-
-		for id,conn in conns.items():
-			if id not in updateConns and not conn["gone"]:
-				conn["gone"]=time.time()
-				
-
+			ret.append(vals)
+		try:
+			queue.put(ret,True,1)
+		except queue.Full as e:
+			return
 	except:
-		raise
+		raise #TODO: ??? what does ConnectionManager raise
 	
 
 
@@ -199,18 +230,27 @@ def reader():
 		read()
 		time.sleep(0.9)
 
+
+from multiprocessing import Process
 def start_tracking():
-	connection_thread = threading.Thread(name='connectionthread', target=reader)
-	connection_thread.start()
+	
+	p = Process(name="connectionthread",target=reader)
+	p.start()
+
+	receiver_thread = threading.Thread(name='connectionrecvthread', target=receiver)
+	receiver_thread.start()
+
+	
 
 if __name__ == "__main__":
-	import pprint
 	from tabulate import tabulate
+	start_tracking()
 	while True:
-		read()
-		time.sleep(0.9)
+		import pprint
+		time.sleep(3.9)
 		print("\n\n")
-
+		pprint.pprint(getConnections())
+		break
 		hdrs=next(iter( getConnections().items() ))[1].keys()
 		rows=[r.values() for id,r in getConnections().items()]
 		print(tabulate(rows,headers=hdrs,floatfmt=".0f"))
