@@ -128,3 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 /massdns
+/ct_nat.py
+/pygtk-conntrack.py
