@@ -1,12 +1,48 @@
 # connvis
-Visualize conntrack connections geographically and organizationally
+**WiFi device connections visualizer for those that do not have a networking degree. Where is your data flowing to?**
 
+## Video
+_connvis_ has two views: (1) sankey diagram of WiFi device connection targets and (2) geographical view and activity of targets.
 
 https://user-images.githubusercontent.com/17916033/129107782-a43c23a0-9e7c-40d7-b7ea-e047d64dde0d.mov
 
 
+## Usage (for end user)
+Connect device(s) to the WiFi network made for connvis and start experimenting.  
+ Connvis is even more fun with friends (supports and is actually designed for multiple devices being used in parallel)!
+
+**TLDR**: Basically [conntrack](https://blog.cloudflare.com/conntrack-tales-one-thousand-and-one-flows/), but it tries to not show IP-addresses (_or ports because everything is 443 or proprietary_), but instead it tries to show some other still useful info related to the connections.
+
+## Requirements
+ - conntrack kernel module (also `echo 1 > /proc/sys/net/netfilter/nf_conntrack_acct`)
+ - dnsmasq
+   - systemd (for dnsmasq journal)
+ - hostapd
+ - python3.9
+
+## Usage
+1. Become a WiFi router `apt-get install dnsmasq hostapd`, enable forwarding, etc.
+2. Install dependencies 
+
+       apt-get install python3-pip whois python3-gi
+       pip3 install -r requirements.txt
+       
+4. Download required files to data folder
+5. Run `python3 main.py` and open the browser.
+6. Follow end user usage
+
+
+
 ```bash
-echo 1 > /proc/sys/net/netfilter/nf_conntrack_acct
+
 apt-get install python3-pip whois python3-gi
 pip3 install -r requirements.txt
 ```
+
+## Copyright
+
+MIT
+
+## Acknowledgements
+
+The authors gratefully acknowledge the funding provided by [IDA](https://www.dataintimacy.fi/en/) who wanted a simple visual approach for . The software was developed under the [Software Engineering](https://soft.utu.fi) Laboratory of Department of Computing in University of Turku
