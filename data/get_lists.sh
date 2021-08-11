@@ -6,4 +6,4 @@ whois -h whois.radb.net -- '-i origin AS15169' | grep ^route: | while read a b;d
 curl https://blocklistproject.github.io/Lists/tiktok.txt | grep -v '^#' | while read a domain wtf;do echo $domain;done > tiktok_domains.txt
 massdns -t A -w tiktok_massdns.txt tiktok_domains.txt  -c 5 -r resolvers.txt
 cat tiktok_massdns.txt | grep " IN A " | while read domain _ _ _ ip;do echo $domain $ip;done > tiktok_resolved.txt
-
+wget https://ip-ranges.amazonaws.com/ip-ranges.json -O amazon_ip-ranges.json
