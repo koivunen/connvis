@@ -14,10 +14,13 @@ homenetwork_broadcast = homenetwork.broadcast_address
 import threading
 
 conns={}
+conns_mainthread = {}
+conns_lock = threading.Lock()
+conns_dirty = True
 activeIPs={}
 ipByteTable={}
 ipPacketTable={}
-queue=Queue()
+queue=Queue(2)
 def getHomeIPFromConnection(conn):
 	"""
 	Return source or destination if either one is in home network
@@ -31,6 +34,7 @@ def getHomeIPFromConnection(conn):
 
 
 def getConnections():
+	global conns_dirty
 	"""
 	Returns connections list:
 	Dict of 'conntrackid': {'bytes': '2519',
@@ -47,7 +51,15 @@ def getConnections():
                'src': IPv4Address('192.168.0.142'),
                'state': 'ESTABLISHED'}					# if tcp connection, shows conntrack state
 	"""
-	return conns
+	if conns_dirty:
+		conns_dirty=False
+		with conns_lock:
+			for k,v in conns.items():
+				if k not in conns_mainthread:
+					conns_mainthread[k]=v
+
+	return conns_mainthread
+
 
 def getIPActivity():
 	return activeIPs
@@ -113,17 +125,19 @@ def processEntryTable(t):
 				activeIPs[src]=now
 				activeIPs[dst]=now
 
-
 	for id,conn in conns.items():
 		if id not in updateConns and not conn["gone"]:
 			conn["gone"]=time.time()
+	global conns_dirty
+	conns_dirty=True
+
 def receiver():
 	while True:
 		t=queue.get()
 		processEntryTable(t)
 
-def read():
-
+def processCMList():
+	"processes the connection manager list and puts it up to queue further processing"
 	try:
 		ret=[]
 		for msg in cm.list():
@@ -138,18 +152,19 @@ def read():
 		try:
 			queue.put(ret,True,1)
 		except queue.Full as e:
-			return
+			return # We will try soon again
 	except:
 		raise #TODO: ??? what does ConnectionManager raise
 	
 
 
-def find(msg,path):
+def _find(msg,path):
 	ret = msg.find(path)
 	#import code; code.interact(local=locals())
 	if ret is not None:
 		return ret.text
 
+# example xml from conntrack
 """<?xml version="1.0" ?>
 <flow type="update">
 		<meta direction="original">
@@ -202,17 +217,17 @@ def find(msg,path):
 def parse(msg):
 
 	ret = {
-		"src": 			find(msg,'./meta[@direction="original"]/layer3/src'),
-		"dst": 			find(msg,'./meta[@direction="original"]/layer3/dst'),
-		"sport": 		find(msg,'./meta[@direction="original"]/layer4/sport'),
-		"dport": 		find(msg,'./meta[@direction="original"]/layer4/dport'),
+		"src": 			_find(msg,'./meta[@direction="original"]/layer3/src'),
+		"dst": 			_find(msg,'./meta[@direction="original"]/layer3/dst'),
+		"sport": 		_find(msg,'./meta[@direction="original"]/layer4/sport'),
+		"dport": 		_find(msg,'./meta[@direction="original"]/layer4/dport'),
 		"protoname": 	msg.find('./meta[@direction="original"]/layer4').get('protoname'),
-		"packets": 		find(msg,'./meta[@direction="original"]/counters/packets'),
-		"bytes": 		find(msg,'./meta[@direction="original"]/counters/bytes'),
-		"packetsIn": 	find(msg,'./meta[@direction="reply"]/counters/packets'),
-		"bytesIn": 		find(msg,'./meta[@direction="reply"]/counters/bytes'),
-		"id": 			find(msg,'./meta[@direction="independent"]/id'),
-		"state":		find(msg,'./meta[@direction="independent"]/state'),
+		"packets": 		_find(msg,'./meta[@direction="original"]/counters/packets'),
+		"bytes": 		_find(msg,'./meta[@direction="original"]/counters/bytes'),
+		"packetsIn": 	_find(msg,'./meta[@direction="reply"]/counters/packets'),
+		"bytesIn": 		_find(msg,'./meta[@direction="reply"]/counters/bytes'),
+		"id": 			_find(msg,'./meta[@direction="independent"]/id'),
+		"state":		_find(msg,'./meta[@direction="independent"]/state'),
 	}
 	src = ret.get("src")
 	if src:
@@ -227,7 +242,7 @@ def parse(msg):
 
 def reader():
 	while True:
-		read()
+		processCMList()
 		time.sleep(0.9)
 
 

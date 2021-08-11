@@ -5,7 +5,21 @@ import utils,geo,ads,config
 
 import connections
 import ip2dns
+import pycountry
 
+def alpha2ToName(a2):
+	if not a2:
+		return
+	try:
+		c= pycountry.countries.get(alpha_2=a2)
+	except LookupError as e:
+		return a2
+
+	if c:
+		return c.name
+	if a2=="ZZ":
+		a2="Unknown"
+	return a2
 
 import geojson
 from geojson import Feature, Point, FeatureCollection
@@ -137,11 +151,21 @@ def provider():
 						originators.append(homeip)
 
 			id=id+1
+
+			targets_ads=[str(ip) for ip in iplist if ads.classifyIP(ip,check_domains=True)]
+			targets=[str(ip) for ip in iplist if str(ip) not in targets_ads]
+
+			targetnames_ads=[name for name in names if ads.classifyDomain(name)]
+
 			features.append(Feature(properties={
-				"id": id,
-				"targets": [str(ip) for ip in iplist],
-				"targetnames": names,
-				"countrycode": countrycode or "00",
+				"id": str((lon,lat)),
+				"targets": targets,
+				"country_code": ipdata["countrycode"],
+				"country_name": alpha2ToName(ipdata["countrycode"]),
+				"targets_ads": 	targets_ads,
+				"targetnames": [n for n in names if n not in targetnames_ads],
+				"targetnames_ads": targetnames_ads,
+				"countrycode": countrycode or "ZZ",
 				"last_activity": last_activity,
 				"last_activity_msec": int(1000*(time.time()-last_activity)),
 				"asns": GenerateASNListFromIPS(iplist),

@@ -6,7 +6,7 @@ import utils,geo
 
 import sys,time,datetime
 
-print("seeding domains")
+print("seeding domains from dnsmasq journal")
 import ip2dns; ip2dns.seedFromDnsmasq()
 import ads; ads.init()
 
