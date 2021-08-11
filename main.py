@@ -12,7 +12,7 @@ import ads; ads.init()
 
 print("starting httpd")
 import vishttp; vishttp.run_threaded()
-time.sleep(1)
+time.sleep(1) # TODO: replace sleeps with ready signaling
 print("starting connection monitoring")
 import connections; connections.start_tracking()
 time.sleep(1)
@@ -20,8 +20,11 @@ print("starting domain monitoring")
 import monitor_domains; monitor_domains.start_monitoring()
 time.sleep(1)
 
+# piping (WIP)
 from sanvis import sankey
+from geovis import provider as geoprov
 vishttp.setSankeyProvider(sankey)
+vishttp.setGeoProvider(geoprov)
 
 time.sleep(1)
 print("Dropping to interactive shell")

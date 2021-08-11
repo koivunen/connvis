@@ -130,3 +130,11 @@ dmypy.json
 /massdns
 /ct_nat.py
 /pygtk-conntrack.py
+/data/facebook_cidrs.txt
+/data/google_cidrs.txt
+/data/tiktok.txt
+/data/tiktok_domains.txt
+/data/tiktok_resolved.txt
+/data/ads.txt
+/data/ads_domainsonly.txt
+/data/amazon_ip-ranges.json

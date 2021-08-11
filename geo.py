@@ -6,7 +6,7 @@ asndb=geoip2.database.Reader('/usr/share/GeoIP/GeoLite2-ASN.mmdb')
 def country(ip):
 	try:
 		response = citydb.city(ip)
-	except:
+	except: # Invalid IP verification?
 		return (False,False,False,)
 	return (response.country.iso_code,response.location.latitude,response.location.longitude)
 def asn(ip):

@@ -9,6 +9,7 @@ import sys,time,datetime
 
 import connections
 import ip2dns
+import datatoname
 
 # Link connections to the sankey visualization
 def sankey():
@@ -76,24 +77,11 @@ def sankey():
 			continue
 
 		# We want to display the short form
-		homeip=utils.shortenIP(homeip)
+		homeip=utils.shortenHomeIPMemorableUniq(homeip,True)
 		names=ip2dns.getShortByIp(remoteip)
 
 		# Classify IP/domain as AD domain
-		isad = ads.classifyIP(remoteip)
-		if not isad:
-			domains = ip2dns.getByIp(remoteip)
-			if domains:
-				for domain in domains:
-					isad = ads.classifyDomain(domain)
-					if isad:
-						break
-			if names:
-				for domain in names:
-					isad = ads.classifyDomain(domain)
-					if isad:
-						break
-		
+		isad = ads.classifyIP(remoteip,check_domains=True)
 
 		# Generate a name for us
 		name="?"
@@ -105,8 +93,8 @@ def sankey():
 			name="*"+names[0]
 		else:
 			name=names[0]
-		if "google" in name:
-			name="GOOGLE"
+		if config.aggregate_google and "google" in name:
+			name="Google"
 		
 		if isad and not adClassification.get(name):
 			#print("setad",name)

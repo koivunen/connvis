@@ -27,8 +27,25 @@ def init():
 			
 
 
-def classifyIP(ip):
-	return ips.get(int(ip))
+def classifyIP(ip,check_domains=False):
+	isad = ips.get(int(ip))
+	if isad:
+		return isad
+	if check_domains:
+		domains = ip2dns.getByIp(ip)
+		if domains:
+			for domain in domains:
+				isad = classifyDomain(domain)
+				if isad:
+					return isad
+				
+		names=ip2dns.getShortByIp(ip)
+		if names:
+			for domain in names:
+				isad = classifyDomain(domain)
+				if isad:
+					return isad
+	return False
 
 def classifyDomain(domain):
 	assert not isinstance(domain, list),"supply a domain"

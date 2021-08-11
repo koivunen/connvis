@@ -1,7 +1,7 @@
 
 var colorGenerator = d3.scaleOrdinal(d3.schemeCategory10);
 var layout = d3.sankey()
-	.extent([[50, 15], [1280 - 50 - 150, 1024 - 30]]);
+	.extent([[100, 15], [1280 - 50 - 150, 1024 - 30]]);
 var diag = d3.sankeyDiagram()
 	.nodeTitle(function (d) { return d.title || d.id; })
 	.linkColor(function (d) { return d.color || colorGenerator(d.id); })
