@@ -39,6 +39,19 @@ apt-get install python3-pip whois python3-gi
 pip3 install -r requirements.txt
 ```
 
+## TODO
+ - [ ] Per device view of activity / bandwidth
+ - [ ] New view: Per device domain resolves alone view
+ - [ ] Sankey connection freshness coloring
+ - [ ] Better purge of expired connections instead of instant disappearing
+ - [ ] Priority sorting domains that an IP has based on: dnsmasq latest resolved domains
+ - [ ] Display which domains an IP had resolved during the session
+ - [ ] Geovisualization show device count without popup on hotspots
+ - [ ] Improve hotspot visualization (labels are overlapping easily)
+ - [ ] Code cleanup
+ - [ ] Extra connection classification: file downloads (long connection and lots of bytes) or something else
+ - [ ] TLS SNI sniffing?
+
 ## Copyright
 
 MIT
