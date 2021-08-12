@@ -51,6 +51,7 @@ pip3 install -r requirements.txt
  - [ ] Code cleanup
  - [ ] Extra connection classification: file downloads (long connection and lots of bytes) or something else
  - [ ] TLS SNI sniffing?
+ - [ ] Real time audible clicking of packets per second
 
 ## Copyright
 
