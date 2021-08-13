@@ -1,0 +1,119 @@
+
+{
+  "containing": "all", 
+  "link_count": 11, 
+  "links": [
+    {
+      "source": ".142", 
+      "target": "GOOGLE", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "sanoma-sndp.fi", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "is.fi", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "speedcurve.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "chartbeat.net", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "*gstatic.com", 
+      "value": 1
+    }, 
+    {
+      "source": ".142", 
+      "target": "192.168.0.1", 
+      "value": 1
+    }, 
+    {
+      "source": ".144", 
+      "target": "GOOGLE", 
+      "value": 1,
+      "color": "rgb(255,22,244)"
+    }, 
+    {
+      "source": ".144", 
+      "target": "Telegram Messenger Inc", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "GOOGLE", 
+      "value": 1
+    }, 
+    {
+      "source": ".143", 
+      "target": "chartbeat.net", 
+      "value": 1
+    }
+  ], 
+  "nodes": [
+    {
+      "id": ".142", 
+      "title": ".142"
+    }, 
+    {
+      "hitcount": 3, 
+      "id": "GOOGLE", 
+      "title": "GOOGLE (3 laitetta)",
+      "color": "rgb(255,255,0,255)"
+    }, 
+    {
+      "hitcount": 1, 
+      "id": "sanoma-sndp.fi", 
+      "title": "sanoma-sndp.fi"
+    }, 
+    {
+      "hitcount": 1, 
+      "id": "is.fi", 
+      "title": "is.fi"
+    }, 
+    {
+      "hitcount": 1, 
+      "id": "speedcurve.com", 
+      "title": "speedcurve.com"
+    }, 
+    {
+      "hitcount": 2, 
+      "id": "chartbeat.net", 
+      "title": "chartbeat.net (2 laitetta)",
+      "color": "rgb(255,22,244)"
+    }, 
+    {
+      "hitcount": 1, 
+      "id": "*gstatic.com", 
+      "title": "*gstatic.com"
+    }, 
+    {
+      "hitcount": 1, 
+      "id": "192.168.0.1", 
+      "title": "192.168.0.1"
+    }, 
+    {
+      "id": ".144", 
+      "title": ".144"
+    }, 
+    {
+      "hitcount": 1, 
+      "id": "Telegram Messenger Inc", 
+      "title": "Telegram Messenger Inc"
+    }, 
+    {
+      "id": ".143", 
+      "title": ".143"
+    }
+  ]
+}
