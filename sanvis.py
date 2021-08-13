@@ -6,18 +6,22 @@ import utils,geo,ads,config
 
 import sys,time,datetime
 
+from collections import defaultdict
 
 import connections
 import ip2dns
 import datatoname
-
+import monitor_domains
 # Link connections to the sankey visualization
 def sankey():
 	nodes=[]
 	links=[]
 	adClassification={}
 	nonAdClassification={}
-
+	nameToDomains=defaultdict(lambda: [])
+	nameToIPs=defaultdict(lambda: [])
+	unaggregated=defaultdict(lambda: defaultdict(lambda: [])) # homeip->name->[]
+	homeToNameLastActivity=defaultdict(lambda: {})
 	def addNode(id,extra=False):
 		if extra is False:
 			extra={}
@@ -36,7 +40,7 @@ def sankey():
 		nodes.append(extra)
 
 
-	def addLink(s,name,hitcount,v=1):
+	def addLink(s,name,hitcount,actualtargets,v=1,last_act=0):
 		s=str(s)
 		t=str(name)
 		for link in links:
@@ -49,7 +53,9 @@ def sankey():
 		links.append({
 			"source": s,
 			"target": t,
-			"value": v
+			"value": v,
+			"last_act": time.time()-last_act,
+			"actualtargets":  actualtargets
 		})
 	link_count=0
 	candidates={}
@@ -72,30 +78,53 @@ def sankey():
 			remoteip = conn.get("dst")
 			homeip = conn.get("src")
 		
-		# Uninteresting
+		# Skip uninteresting
 		if remoteip==config.homenetwork_router or homeip==config.homenetwork_router:
 			continue
 
 		# We want to display the short form
 		homeip=utils.shortenHomeIPMemorableUniq(homeip,True)
 		names=ip2dns.getShortByIp(remoteip)
-
-		# Classify IP/domain as AD domain
-		isad = ads.classifyIP(remoteip,check_domains=True)
-
-		# Generate a name for us
-		name="?"
-		if not names:
-			name=geo.asn(remoteip)[1]
-			if not name:
-				name=str(remoteip)
-		elif len(names)>1:
-			name="*"+names[0]
-		else:
-			name=names[0]
-		if config.aggregate_google and "google" in name:
-			name="Google"
+		remote_resolved=False
+		# Shrink resolved name list (if possible) to only actually resolved domains
+		if names and names!=[]:
+			names_resolved=monitor_domains.filterOnlyResolvedDomains(names,short=True)
+			if names_resolved and names_resolved!=[]:
+				names=names_resolved
 		
+				remote_resolved=names_resolved
+
+		# Generate an aggregate name for us
+		name=str(remoteip)
+
+		aggregated=False
+		if names:
+			if len(names)>1:
+				monitor_domains.sortDomainsByLastResolved(names)
+				aggregated=True
+			name=names[0]
+		else:
+			asname=geo.asn(remoteip)[1]
+			if asname:
+				name=asname
+			
+		# Google is always aggregated
+		if config.aggregate_google and "google" in name.lower():
+			name="Google"
+		elif aggregated:
+			name="*"+name
+		
+		l=unaggregated[homeip][name]
+		remote=str(remoteip)
+		if remote_resolved and len(remote_resolved)>0:
+			remote=" ".join(remote_resolved)
+
+		s="%s dport=%s %s"%(str(remote),str(conn["dport"]),str(conn["protoname"]))
+		if s not in l:
+			l.append(s)
+
+		# Classify IP/domain as advert domain
+		isad = ads.classifyIP(remoteip,check_domains=True)
 		if isad and not adClassification.get(name):
 			#print("setad",name)
 			adClassification[name]="ad"
@@ -103,15 +132,34 @@ def sankey():
 			nonAdClassification[name]=True
 			#print("SKIP?",name)
 
+		# Store domains for  aggregate 
+		details=nameToDomains[name]
+		for n in (names or []):
+			if n not in details:
+				details.append(n)
+
+		# Store IPs for the aggregate name
+		details=nameToIPs[name]
+		details.append(str(remoteip))
+
+
+		# Store targets for homeip
 		cnames=candidates.get(homeip)
 		if not cnames:
 			cnames=[]
 			candidates[homeip]=cnames
 		if name not in cnames:
 			cnames.append(name)
+
 			link_count+=1
 			name_hits[name]=name_hits.get(name,0)+1
-	
+
+		# store last activity for this name
+		homeipNames=homeToNameLastActivity[homeip]
+		last_act=max(conn["lastActivity"],conn["gone"])
+		homeipNames[name]=min(homeipNames.get(name,time.time()),last_act)
+		
+
 	# If we have over 32 links then we can only show common links
 	ONLY_COMMON_LINKS=link_count>32
 
@@ -163,11 +211,15 @@ def sankey():
 		for name in names:
 			if ONLY_COMMON_LINKS and namePopularity[name]<=1:
 				continue
-			addLink(homeip,name,namePopularity[name])
+			last_act=homeToNameLastActivity[homeip][name]
+			actualtargets=unaggregated[homeip][name]
+			addLink(homeip,name,namePopularity[name],actualtargets,last_act=last_act)
 
 	ret = {
 		"nodes": nodes,
 		"links": links,
+		"namedetails": nameToDomains,
+		"nameToIP": nameToIPs,
 		"containing": "purged" if PURGED_NAMES else ("common" if ONLY_COMMON_LINKS else "all"),
 		"link_count": link_count
 	}

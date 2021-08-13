@@ -12,3 +12,33 @@ body,html {
 	height: 100%;
 	
 }
+
+div#status_containing {
+    border: 1px solid #4283ff;
+    display: inline-block;
+    padding: 0.2em;
+    margin-top: 0.1em;
+}
+
+#link_count {
+    font-weight: bold;
+}
+
+#error {
+    background-color: #ffbdbd;
+}
+div#pausecontainer {display: inline-block}
+#containing {
+    font-weight: bold;
+}
+
+#status_link_count {
+    display: inline-block;
+    border: 1px solid #4283ff;
+    padding: 0.2em;
+}
+
+#link_count_visible_wrap {
+    display: inline-block;
+    font-weight: bold;
+}
