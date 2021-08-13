@@ -4,6 +4,7 @@
 from xml.etree.ElementTree import XML
 import xml.dom.minidom
 import queue
+from queue import Full
 import ipaddress
 from multiprocessing import Process, Queue, process
 from Conntrack import ConnectionManager
@@ -11,7 +12,9 @@ import time
 cm = ConnectionManager()
 from config import homenetwork,homenetwork_router
 homenetwork_broadcast = homenetwork.broadcast_address
-import threading
+import threading,pprint
+
+#TODO: Thread safety for other than conns in a saner way
 
 conns={}
 conns_mainthread = {}
@@ -68,8 +71,7 @@ def getIPByteTable():
 	#TODO
 	return ipByteTable
 def getIPPacketTable():
-	#TODO
-	 return ipPacketTable
+	return ipPacketTable
 
 
 def getIPConnections():
@@ -83,8 +85,17 @@ def doDiff(conn,vals):
 	if conn["packets"]!=vals["packets"] or conn["packetsIn"]!=vals["packetsIn"]:
 		now=time.time()
 		vals["lastActivity"]=now
-		activeIPs[conn["src"]]=now
+		src=conn["src"]
+		activeIPs[src]=now
 		activeIPs[conn["dst"]]=now
+		added=vals["packets"]-conn["packets"]
+		if added<0:
+			print("negative packet count (",added,") on",src,conn["dst"])
+			pprint.pprint(vals)
+			pprint.pprint(conn)
+			added=0
+
+		ipPacketTable[src]=ipPacketTable.get(src,0)+added
 
 def isHomeDNSConnection(conn):
 	if conn.get("dport")!=53 and conn.get("sport")!=53:
@@ -117,13 +128,13 @@ def processEntryTable(t):
 				vals=conn
 				vals["gone"]=False					
 			else: # New, initialie
-				conns[id]=vals
-				vals["gone"]=False
 				now = time.time()
+				vals["gone"]=False
 				vals["lastActivity"]=now
-
-				activeIPs[src]=now
-				activeIPs[dst]=now
+				with conns_lock:
+					conns[id]=vals
+					activeIPs[src]=now
+					activeIPs[dst]=now
 
 	for id,conn in conns.items():
 		if id not in updateConns and not conn["gone"]:
@@ -132,10 +143,12 @@ def processEntryTable(t):
 	conns_dirty=True
 
 def receiver():
-	while True:
-		t=queue.get()
-		processEntryTable(t)
-
+	try:
+		while True:
+			t=queue.get()
+			processEntryTable(t)
+	except KeyboardInterrupt as e:
+		return
 def processCMList():
 	"processes the connection manager list and puts it up to queue further processing"
 	try:
@@ -151,17 +164,20 @@ def processCMList():
 			ret.append(vals)
 		try:
 			queue.put(ret,True,1)
-		except queue.Full as e:
+		except Full as e:
+			print("processCMList being consumed too slow")
 			return # We will try soon again
 	except:
-		raise #TODO: ??? what does ConnectionManager raise
+		raise #TODO: ??? what does ConnectionManager raise and when
 	
 
 
-def _find(msg,path):
+def _find(msg,path,toint=False):
 	ret = msg.find(path)
 	#import code; code.interact(local=locals())
 	if ret is not None:
+		if toint:
+			return int(ret.text)
 		return ret.text
 
 # example xml from conntrack
@@ -219,14 +235,14 @@ def parse(msg):
 	ret = {
 		"src": 			_find(msg,'./meta[@direction="original"]/layer3/src'),
 		"dst": 			_find(msg,'./meta[@direction="original"]/layer3/dst'),
-		"sport": 		_find(msg,'./meta[@direction="original"]/layer4/sport'),
-		"dport": 		_find(msg,'./meta[@direction="original"]/layer4/dport'),
+		"sport": 		_find(msg,'./meta[@direction="original"]/layer4/sport',True),
+		"dport": 		_find(msg,'./meta[@direction="original"]/layer4/dport',True),
 		"protoname": 	msg.find('./meta[@direction="original"]/layer4').get('protoname'),
-		"packets": 		_find(msg,'./meta[@direction="original"]/counters/packets'),
-		"bytes": 		_find(msg,'./meta[@direction="original"]/counters/bytes'),
-		"packetsIn": 	_find(msg,'./meta[@direction="reply"]/counters/packets'),
-		"bytesIn": 		_find(msg,'./meta[@direction="reply"]/counters/bytes'),
-		"id": 			_find(msg,'./meta[@direction="independent"]/id'),
+		"packets": 		_find(msg,'./meta[@direction="original"]/counters/packets',True),
+		"bytes": 		_find(msg,'./meta[@direction="original"]/counters/bytes',True),
+		"packetsIn": 	_find(msg,'./meta[@direction="reply"]/counters/packets',True),
+		"bytesIn": 		_find(msg,'./meta[@direction="reply"]/counters/bytes',True),
+		"id": 			_find(msg,'./meta[@direction="independent"]/id',True),
 		"state":		_find(msg,'./meta[@direction="independent"]/state'),
 	}
 	src = ret.get("src")
@@ -241,18 +257,21 @@ def parse(msg):
 
 
 def reader():
-	while True:
-		processCMList()
-		time.sleep(0.9)
+	try:
+		while True:
+			processCMList()
+			time.sleep(0.9)
+	except KeyboardInterrupt as e:
+		return
 
 
 from multiprocessing import Process
 def start_tracking():
-	
-	p = Process(name="connectionthread",target=reader)
-	p.start()
+	global receiver_thread,connection_thread
+	connection_thread = Process(name="connectionthread",target=reader, daemon=True)
+	connection_thread.start()
 
-	receiver_thread = threading.Thread(name='connectionrecvthread', target=receiver)
+	receiver_thread = threading.Thread(name='connectionrecvthread', target=receiver, daemon=True)
 	receiver_thread.start()
 
 	
