@@ -41,11 +41,21 @@ def country(ip):
 		return (False,False,False,)
 	return (response.country.iso_code,response.location.latitude,response.location.longitude)
 
+import config
+CGN=ipaddress.ip_network("100.64.0.0/10")
+p1=ipaddress.ip_network("10.0.0.0/8")
 def asn(ip):
 	
 	ip=ipaddress.ip_address(ip)
 	
-
+	if ip in config.homenetwork:
+		return (-1,"HOME")
+	if ip in p1:
+		return (-2,"Private 10.x.x.x")
+	if ip.is_private:
+		return (-2,"Local Network")
+	if ip in CGN:
+		return (-3,"Carrier Grade NAT")
 
 	try:
 		response = asndb.asn(ip)
