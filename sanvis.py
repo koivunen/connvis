@@ -68,7 +68,7 @@ def sankey():
 		if conn.get("state") and conn["state"]!="ESTABLISHED":
 			continue
 
-
+		#TODO: packetIn gets swapped also if this istrue
 		homeip = connections.getHomeIPFromConnection(conn)
 		remoteip = conn.get("dst")
 		if homeip==remoteip:

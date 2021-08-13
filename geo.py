@@ -54,8 +54,12 @@ def asn(ip):
 		return (-2,"Private 10.x.x.x")
 	if ip.is_private:
 		return (-2,"Local Network")
+	if ip.is_multicast:
+		return (-3,"Multicast")
+	if ip.is_link_local:
+		return (-4,"LinkLocal")
 	if ip in CGN:
-		return (-3,"Carrier Grade NAT")
+		return (-5,"Carrier Grade NAT")
 
 	try:
 		response = asndb.asn(ip)

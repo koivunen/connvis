@@ -16,6 +16,39 @@ var diag = d3.sankeyDiagram()
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
+var loadedData=false; //TODO
+
+var lastDataJson="FAILED";
+function download(content, fileName, contentType) {
+    var a = document.createElement("a");
+    var file = new Blob([content], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+}
+function DownloadData() {
+	download(lastDataJson, 'sankey'+Math.round(new Date().getTime()/1000)+'.json', 'text/plain');
+}
+function ImportData() {
+	var input = document.createElement('input');
+	input.type = 'file';
+
+	input.onchange = e => {
+
+		var file = e.target.files[0];
+
+		var reader = new FileReader();
+		reader.readAsText(file, 'UTF-8');
+
+		reader.onload = readerEvent => {
+			var content = readerEvent.target.result;
+			loadedData=JSON.parse(content);
+		}
+
+	}
+
+	input.click();
+}
 
 async function updateLoop() {
 	var svg = d3.select('#sankey svg');
@@ -27,8 +60,12 @@ async function updateLoop() {
 		};
 
 		try {
-			let response = await fetch('/sankey.json');
-			var data = await response.json();
+			var data = loadedData;
+			if (!data) {
+				let response = await fetch('/sankey.json');
+				lastDataJson = await response.text();
+				data = JSON.parse(lastDataJson);
+			}
 			var links = data.links;
 			for (const [key, link] of Object.entries(links)) {
 				const max_age=10;
@@ -71,7 +108,7 @@ async function updateLoop() {
 
 			
 		console.log("updating");
-		await sleep(997);
+		await sleep(loadedData?4000:997);
 	}
 }
 
