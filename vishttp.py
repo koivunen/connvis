@@ -3,6 +3,7 @@ import folium
 import threading
 import random
 import sys
+import config
 import math
 import geojson
 from geojson import Feature, Point, FeatureCollection
@@ -21,19 +22,25 @@ def index():
 
 
 import connections
-@app.route('/ipinfo.json')
+@app.route('/deviceactivity.json')
 def ipinfo():
 	acts = {}
-	
-	for k,v in connections.getIPActivity().items():
-		acts[str(k)]=v
-	return jsonify({        "activity": acts    })
+	activity_local = {}
+	for ip,last_activity in connections.getIPActivity().items():
+		if ip in config.homenetwork:
+			activity_local[str(ip)]=last_activity
+		else:
+			acts[str(ip)]=last_activity
+
+	return jsonify({        
+		"activity": acts,   
+		"activity_local": activity_local,
+	})
 
 import config
 @app.route('/config.json')
-def config():
-	from config import homenetwork
-	return jsonify({  "homenetwork": str(homenetwork) })
+def configjson():
+	return jsonify({  "homenetwork": str(config.homenetwork) })
 
 import monitor_domains
 @app.route('/ipdomainquerymappingshort.json')
