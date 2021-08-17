@@ -1,8 +1,12 @@
 
+from collections import defaultdict
 
-ip2queryShort={}
+ip2queryShort=defaultdict(lambda: {})
+ip2query=defaultdict(lambda: {})
 def getIPQueryMappingShort():
 	return ip2queryShort
+def getIPQueryMapping():
+	return ip2query
 
 def sortDomainsByLastResolved(domains,reverse=False):
 	now=time.time()
@@ -44,21 +48,21 @@ def lastDomainResolveTime(domain,short=False):
 import time
 import dnsmasq_parser
 import ip2dns
+import ipaddress
 def onJournalMessage(entry):
 	l=entry["MESSAGE"]
 	ts=entry['__REALTIME_TIMESTAMP'] #we are parsing real time, no use
 
 	q = dnsmasq_parser.parse_query(l)
 	if q:
-		source = q["source"]
-		db=ip2queryShort.get(source)
-		if not db:
-			db={}
-			ip2queryShort[source]=db
-		domain=ip2dns.shorten(q["query"])
-		now=time.time()
-		db[domain]=now
+		source = ipaddress.ip_address(q["source"])
+		domain=q["query"]
 		sdomain=ip2dns.shorten(domain)
+		now=time.time()
+
+		ip2query[source][domain]=now
+		ip2queryShort[source][sdomain]=now
+		
 		resolveTimeList[domain]=now
 		resolveShortTimeList[sdomain]=now
 
