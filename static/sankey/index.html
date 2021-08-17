@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+
 <head>
     <title>CONNVIS | Realtime sankey of devices to targets</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
     <link rel="stylesheet" href="site.css" />
 
-	<script src="//d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <script src="//d3js.org/d3.v4.min.js" charset="utf-8"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3-color@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3-interpolate@3"></script>
-	<script src="d3-sankey-diagram.js" charset="utf-8"></script>
-	<style>
+    <script src="d3-sankey-diagram.js" charset="utf-8"></script>
+    <style>
         #sankey {
             margin-left: auto;
             margin-right: auto;
@@ -21,26 +22,29 @@
         }
 
         svg .link:hover {
-         opacity: 1;
+            opacity: 1;
         }
-
     </style>
 </head>
+
 <body>
     <center>
-        
+
         <div class="error" id="error"></div>
         <div id="status_containing">
             Sisältää: <span id="containing"></span>
         </div>
         <div id="status_link_count">
-            Kohteita yhteensä: <span id="link_count"></span><span id="link_count_visible_wrap"> (näytetään <span id="link_count_visible"></span>)</span>
+            Kohteita yhteensä: <span id="link_count"></span><span id="link_count_visible_wrap"> (näytetään <span
+                    id="link_count_visible"></span>)</span>
         </div>
-        <div id="pausecontainer">     <button onclick="ImportData()" name="import">Import</button>       <button onclick="DownloadData()" name="download">Export</button>  <input type="checkbox" id="pausebtn" name="pausebtn"><label for="pausebtn">pause</label>
+        <div id="pausecontainer"> <button onclick="ImportData()" name="import">Import</button> <button
+                onclick="DownloadData()" name="download">Export</button> <input type="checkbox" id="pausebtn"
+                name="pausebtn"><label for="pausebtn">pause</label>
         </div>
     </center>
-    <div class="sankey" id="sankey"><svg width="1300" height="1024" ></svg></div>
+    <div class="sankey" id="sankey"><svg width="1300" height="1024"></svg></div>
     <script src="index.js"></script>
 </body>
-</html>
 
+</html>
