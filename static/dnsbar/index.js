@@ -109,8 +109,8 @@ async function updateLoop() {
 			await sleep(333);
 		};
 
+		var data = loadedData;
 		try {
-			var data = loadedData;
 			if (!data) {
 				let response = await fetch('/dnsbar.json');
 				lastDataJson = await response.text();
@@ -127,7 +127,6 @@ async function updateLoop() {
 			}
 		} catch (e) {
 			d3.select('#error').text("VIRHE: " + e);
-			last_error_data = data;
 			await sleep(3000);
 			continue;
 		}
