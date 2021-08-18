@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+	<title>CONNVIS | Realtime sankey of devices to targets</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+	<link rel="stylesheet" href="site.css" />
+
+	<script src="d3.v4.min.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-color@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-interpolate@3"></script>
+	<script src="echarts.min.js"></script>
+
+</head>
+
+<body>
+	<center>
+
+		<div class="error" id="error"></div>
+		
+		<div id="status_link_count">
+			Targets: <span id="link_count"></span><span id="link_count_visible_wrap"> (Showing only <span
+					id="link_count_visible"></span>)</span>
+		</div>
+		<div id="pausecontainer"> <button onclick="ImportData()" name="import">Import</button> <button
+				onclick="DownloadData()" name="download">Export</button> <input type="checkbox" id="pausebtn"
+				name="pausebtn"><label for="pausebtn">pause</label>
+		</div>
+	</center>
+	<div id="chart"></div>
+
+	<script src="index.js"></script>
+</body>
+
+</html>

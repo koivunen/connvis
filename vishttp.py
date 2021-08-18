@@ -21,6 +21,7 @@ def index():
 	return folium_map._repr_html_()
 
 
+import config
 import connections
 @app.route('/deviceactivity.json')
 def ipinfo():
@@ -37,7 +38,6 @@ def ipinfo():
 		"activity_local": activity_local,
 	})
 
-import config
 @app.route('/config.json')
 def configjson():
 	return jsonify({  "homenetwork": str(config.homenetwork) })
@@ -79,6 +79,22 @@ def geodata():
 		response=geojson.dumps(GeoProvider(), sort_keys=False),
 		mimetype='application/json',
 		status=200)
+
+
+def dnsBarProvider():
+	return {}
+
+def setDnsBarProvider(p):
+	global dnsBarProvider
+	dnsBarProvider=p
+
+@app.route('/dnsbar.json')
+def dnsbar():
+	return jsonify(dnsBarProvider())
+
+@app.route('/dnsbar_unshort.json')
+def dnsbar_unshort():
+	return jsonify(dnsBarProvider(short=False))
 
 
 

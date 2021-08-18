@@ -25,6 +25,7 @@ time.sleep(0.1)
 
 # piping (WIP)
 from sanvis import sankey
+from dnsvis import provider as dnsbar
 from geovis import provider as geoprov
 
 print("starting httpd")
@@ -32,7 +33,7 @@ import vishttp; vishttp.run_threaded()
 
 vishttp.setSankeyProvider(sankey)
 vishttp.setGeoProvider(geoprov)
-
+vishttp.setDnsBarProvider(dnsbar)
 inspect_enabled=config.args.shell
 
 import threading
@@ -63,8 +64,25 @@ if inspect_enabled:
 	time.sleep(1)
 	print("\n")
 	print("============ Inspection shell enabled ============")
+
+	import traceback, sys, code
+	def debug_provider(provider):
+		try:
+			provider()
+		except:
+			type, value, tb = sys.exc_info()
+			traceback.print_exc()
+			last_frame = lambda tb=tb: last_frame(tb.tb_next) if tb.tb_next else tb
+			frame = last_frame().tb_frame
+			ns = dict(frame.f_globals)
+			ns.update(frame.f_locals)
+			print("============ Exception! You can now debug inline it ============")
+			code.interact(local=ns)
+
+
 	import code; code.interact(local=locals())
 	print("\n")
 	print("CONNVIS Quit")
 else:
+	time.sleep(1)
 	print("CONNVIS Ready!")

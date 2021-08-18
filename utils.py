@@ -22,6 +22,11 @@ def shortenHomeIPMemorableUniq(homeip,original_important=True,net=config.homenet
 		homeipname=f"{homeip}\n({homeipname})"
 	return homeipname
 
+def aggregateBigCompanies(identifier,where=False):
+	if config.aggregate_google and "google" in identifier.lower(): # gvt2.com gstatic.om doubleclick
+			return "google.com" 
+	return identifier
+
 if __name__ == "__main__":
 	import random
 	net=ipaddress.ip_network("10.0.0.0/16")
@@ -32,3 +37,4 @@ if __name__ == "__main__":
 	print("shortenIP",shortenIP(ip,net))
 	ip=h[len(h)-1]
 	print("shortenIP",shortenIP(ip,net))
+

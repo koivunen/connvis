@@ -1,0 +1,46 @@
+#chart {
+
+	width: 1280px;
+	height: 1024px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+body,html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+	width: 100%;
+	height: 100%;
+	
+}
+
+div#status_containing {
+    border: 1px solid #4283ff;
+    display: inline-block;
+    padding: 0.2em;
+    margin-top: 0.1em;
+}
+
+#link_count {
+    font-weight: bold;
+}
+
+#error {
+    background-color: #ffbdbd;
+}
+div#pausecontainer {display: inline-block}
+#containing {
+    font-weight: bold;
+}
+
+#status_link_count {
+    display: inline-block;
+    border: 1px solid #4283ff;
+    padding: 0.2em;
+}
+
+#link_count_visible_wrap {
+    display: inline-block;
+    font-weight: bold;
+}
