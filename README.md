@@ -1,7 +1,7 @@
 # connvis
 **WiFi device connections visualizer for those that do not have a networking degree. Where is your data flowing to?**
 
-## Video
+## Video (outdated)
 _connvis_ has two views: (1) sankey diagram of WiFi device connection targets and (2) geographical view and activity of targets.
 
 https://user-images.githubusercontent.com/17916033/129107782-a43c23a0-9e7c-40d7-b7ea-e047d64dde0d.mov
@@ -53,10 +53,18 @@ pip3 install -r requirements.txt
  - [ ] TLS SNI sniffing?
  - [ ] Real time audible clicking of packets per second
 
+## Used sources
+
+Blocklists by https://pgl.yoyo.org/adservers/ and https://someonewhocares.org and https://blocklistproject.github.io
+
+
+Geolocation data provided by https://MaxMind.com and https://lite.ip2location.com ( This site or product includes IP2Location LITE data available from https://lite.ip2location.com ).
+
+
 ## Copyright
 
 MIT
 
 ## Acknowledgements
 
-The authors gratefully acknowledge the funding provided by [IDA](https://www.dataintimacy.fi/en/) who wanted a simple visual approach for . The software was developed under the [Software Engineering](https://soft.utu.fi) Laboratory of Department of Computing in University of Turku
+The authors gratefully acknowledge the funding provided by [IDA](https://www.dataintimacy.fi/en/) for the development of the software. The software was developed under the [Software Engineering](https://soft.utu.fi) Laboratory of Department of Computing in University of Turku. 
