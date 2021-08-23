@@ -50,9 +50,17 @@ from publicsuffixlist import PublicSuffixList
 psl = PublicSuffixList()
 
 def shorten(domain):
-	return psl.privatesuffix(domain)
+	if not domain:
+		return domain
 
-import dnsmasq_parser
+	ret = psl.privatesuffix(domain)
+	if ret:
+		return ret
+	if not psl.is_public(domain):
+		print("FIXME: PSL could not digest:",domain)
+	return domain # it IS a private suffix or not a domain
+
+import dnsmasq_parser,config
 def onJournalMessage(entry):
 	l=entry["MESSAGE"]
 
@@ -60,10 +68,12 @@ def onJournalMessage(entry):
 	if r:
 		ip=r["ip"]
 		domain=r["domain"]
+		if domain in config.ignored_domains:
+			return
 		if not "NODATA" in ip and not "NXDOMAIN" in ip:
 			feed(ip,domain)
 		return r
-
+	
 def seedFromDnsmasq():
 
 	import select

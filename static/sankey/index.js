@@ -59,8 +59,8 @@ async function updateLoop() {
 			await sleep(333);
 		};
 
+		var data = loadedData;
 		try {
-			var data = loadedData;
 			if (!data) {
 				let response = await fetch('/sankey.json');
 				lastDataJson = await response.text();

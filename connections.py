@@ -37,7 +37,6 @@ def getHomeIPFromConnection(conn):
 
 
 def getConnections():
-	global conns_dirty
 	"""
 	Returns connections list:
 	Dict of 'conntrackid': {'bytes': '2519',
@@ -54,13 +53,17 @@ def getConnections():
                'src': IPv4Address('192.168.0.142'),
                'state': 'ESTABLISHED'}					# if tcp connection, shows conntrack state
 	"""
+	
+	global conns_dirty,conns_mainthread
+	
+	# TODO: cleanup!!!
+	#assert threading.current_thread() is threading.main_thread()
+	
 	if conns_dirty:
 		conns_dirty=False
 		with conns_lock:
-			for k,v in conns.items():
-				if k not in conns_mainthread:
-					conns_mainthread[k]=v
-
+			conns_mainthread=dict(conns) # GIL cannot yield in a dict copy
+			
 	return conns_mainthread
 
 

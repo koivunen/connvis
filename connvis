@@ -1,1 +1,6 @@
-sudo python3 main.py "$@"
+reset -I
+(
+	sudo python3 main.py "$@"
+)
+reset -I
+

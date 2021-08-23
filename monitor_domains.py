@@ -49,6 +49,7 @@ import time
 import dnsmasq_parser
 import ip2dns
 import ipaddress
+import config
 def onJournalMessage(entry):
 	l=entry["MESSAGE"]
 	ts=entry['__REALTIME_TIMESTAMP'] #we are parsing real time, no use
@@ -57,6 +58,9 @@ def onJournalMessage(entry):
 	if q:
 		source = ipaddress.ip_address(q["source"])
 		domain=q["query"]
+		if domain in config.ignored_domains:
+			return
+
 		sdomain=ip2dns.shorten(domain)
 		now=time.time()
 

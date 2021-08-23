@@ -113,10 +113,15 @@ def setSankeyProvider(p):
 def sankeyjson():
 	return jsonify(SankeyProvider())
 
-
+import ipaddress,utils
 @app.route("/")
 def main():
-	return render_template("hello.html")
+	yourip=ipaddress.ip_address(request.remote_addr)
+	yourname=request.remote_addr
+	if yourip in config.homenetwork:
+		yourname=utils.shortenHomeIPMemorableUniq(yourip,True)
+		
+	return render_template("hello.html",yourip=yourip,yourname=yourname)
 
 
 def run(use_reloader=False):
