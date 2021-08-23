@@ -60,12 +60,17 @@ def sankey():
 	link_count=0
 	candidates={}
 	name_hits={}
+
+	now=time.time()
 	for id,conn in connections.getConnections().items():
 		
 		#TODO: keep gone for a while (if space)
 		if conn.get("gone"):
 			continue
 		if conn.get("state") and conn["state"]!="ESTABLISHED":
+			continue
+		lastEventTime = conn.get("gone") or conn.get("lastActivity")
+		if now-lastEventTime>60*5:
 			continue
 
 		#TODO: packetIn gets swapped also if this istrue
@@ -178,7 +183,7 @@ def sankey():
 				if namePopularity[name]>1:
 					final_count+=1
 	
-	# OOPS: If we try finding common links and there none then show at least something (TODO: sort by target freshness)
+	# OOPS: If we try finding common links and there none then show at least something (TODO: sort by target freshness and only show 25 targets instead of reducing to only common targets)
 	if final_count<1:
 		ONLY_COMMON_LINKS=False
 		final_count=link_count

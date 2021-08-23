@@ -38,6 +38,7 @@ def populateNames(remoteip,res):
 	return res
 
 def iterateViableConnections():
+	now=time.time()
 	for id,conn in connections.getConnections().items():
 		
 		#TODO: keep gone for a while (if space)
@@ -47,6 +48,8 @@ def iterateViableConnections():
 			continue
 
 		lastEventTime = conn.get("gone") or conn.get("lastActivity")
+		if now-lastEventTime>60*5:
+			continue
 
 		homeip = connections.getHomeIPFromConnection(conn)
 		remoteip = conn.get("dst")
