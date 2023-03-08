@@ -60,6 +60,27 @@ Blocklists by https://pgl.yoyo.org/adservers/ and https://someonewhocares.org an
 
 Geolocation data provided by https://MaxMind.com and https://lite.ip2location.com ( This site or product includes IP2Location LITE data available from https://lite.ip2location.com ).
 
+## 2023 updates
+
+Switched to ethernet-passthrough. Using wireless access point separately.
+
+```bash
+# /etc/sysctl.d/99-connvis.conf
+net.ipv4.ip_forward=1
+#net.ipv6.conf.all.forwarding=1
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+#net.ipv6.conf.lo.disable_ipv6 = 1
+net.netfilter.nf_conntrack_acct = 1
+
+# Can use both wireless and ethernet for connectivity
+# /etc/iptables/rules.v4
+-A POSTROUTING -s 192.168.0.0/24 -o enp12s0 -j MASQUERADE
+-A POSTROUTING -s 192.168.1.0/24 -o enp12s0 -j MASQUERADE
+-A POSTROUTING -s 192.168.0.0/24 -o wlp2s0 -j MASQUERADE
+-A POSTROUTING -s 192.168.1.0/24 -o wlp2s0 -j MASQUERADE
+```
+
 
 ## Copyright
 
