@@ -39,7 +39,8 @@ apt-get install python3-pip whois python3-gi
 pip3 install -r requirements.txt
 ```
 
-## TODO
+## TODO 
+ - [ ] Add connection flushing: https://github.com/koivunen/connvis/blob/ee9cd87a4ac02dba2b84104f2056f6594edfc4c2/Conntrack.py#L392
  - [ ] Per device view of activity / bandwidth
  - [ ] New view: Per device domain resolves alone view
  - [ ] Sankey connection freshness coloring
