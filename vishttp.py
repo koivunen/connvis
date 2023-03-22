@@ -2,7 +2,7 @@ from flask import Flask, request, send_from_directory, jsonify, render_template,
 import folium
 import threading
 import random
-import sys
+import sys,os,signal
 import config
 import math
 import geojson
@@ -12,6 +12,26 @@ app = Flask(__name__,
 			static_url_path='',
 			static_folder='static',
 			template_folder='templates')
+
+from werkzeug.middleware.proxy_fix import ProxyFix
+
+app.wsgi_app = ProxyFix(
+	app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
+)
+
+@app.route('/kill')
+def kill_server():
+	response = Response('Killing server')
+
+	@response.call_on_close
+	def process_after_request():
+		os.kill(os.getpid(), signal.SIGINT)
+	return response
+
+@app.route('/flush')
+def flush_conntrack():
+	import subprocess
+	return subprocess.check_output(['conntrack','-F'],stderr=subprocess.STDOUT).decode('utf-8')
 
 
 @app.route('/folium')
@@ -45,7 +65,7 @@ def configjson():
 import monitor_domains
 @app.route('/ipdomainquerymappingshort.json')
 def ipdomainquerymappingshort():
-	return jsonify({        "mapping": monitor_domains.getIPQueryMappingShort()    })
+	return jsonify({        "mapping": {str(k):v for k,v in monitor_domains.getIPQueryMappingShort().items()}    })
 
 # Geo visualization
 
