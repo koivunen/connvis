@@ -140,3 +140,4 @@ dmypy.json
 /data/amazon_ip-ranges.json
 /data/IP2PROXY-LITE-PX9.BIN
 /data/ip2location.bin
+/data_*
