@@ -22,26 +22,42 @@
 	
 	<h1>CONNVIS Real Time Network Monitoring and Visualizer</h1>
 	<br/>
-	<span><b>Your identifier / tunnisteesi: </b><h2 class="yourname">{{ yourname }}</h2></span>
+	<span><b>Your identifier: </b><h2 class="yourname">{{ yourname }}</h2></span>
 	<br/>
+	<span id="dnsprivacytest"></span>
 	<hr/>
 	<br/>
-	<a class="vislink" href="sankey/index.html">Local device to destinations</a> (<a href="sankey.json">json</a>)
-	<br/>
-	<a class="vislink" href="geo/index.html">Targets on a world map</a> (<a href="geo.json">json</a>)
-	<br/>
-	<a class="vislink" href="dnsbar/index.html">Popular and recent domains</a> (<a href="dnsbar.json">json</a>)
-	<br/>
-	<a class="vislink" href="conntrack/index.html">Connection list</a> (<a href="conntrack.json">json</a>)
-	<br/>
-	<a class="vislink" href="activity/index.html">Device last activity</a> (<a href="deviceactivity.json">json</a>)
+	
+	<a class="vislink" href="sankey/index.html"><img class="visthumb" src="sankey/thumb.png"></img><br/>Sankey visualization of connections</a> (<a href="sankey.json">sankey.json</a>)
 	<br/>
 	<br/>
-	<a href="/ipinfo.json">IP info</a>
+	<a class="vislink" href="geo/index.html"><img class="visthumb" src="geo/thumb.png"></img><br/>Map visualization of connection targets</a> (<a href="geo.json">geo.json</a>)
+	<br/>
+	<br/>
+	<a class="vislink" href="dnsbar/index.html"><img class="visthumb" src="dnsbar/thumb.png"></img><br/>List of domains by popularity/age</a> (<a href="dnsbar.json">json</a>)
+	<br/>	<br/>
+	(WIP) <a class="vislink" href="conntrack/index.html">List of connections</a> (<a href="conntrack.json">json</a>)
+	<br/>
+	(WIP) <a class="vislink" href="activity/index.html">List of device activity</a> (<a href="deviceactivity.json">json</a>)
+	<br/>
+	<br/>
+	(WIP) <a href="/ipinfo.json">IP info</a>
 
 	<br/>
-	<a href="/ipdomainquerymappingshort.json">Domain info</a>
+	(WIP) <a href="/ipdomainquerymappingshort.json">Domain info (json)</a>
 
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<a href="/flush">[FLUSH CONNTRACK TABLES]</a>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<a href="/kill">[KILL SERVER]</a>
+	<br/>
 	<br/>
 	<br/>
 	<br/>
@@ -49,6 +65,72 @@
 	<br/>
 	<br/>
 	 <small>This site or product includes IP2Location LITE data available from <a href="https://lite.ip2location.com">https://lite.ip2location.com</a>.</small>
+
+	 <script>
+
+function checkAny() {
+	
+fetch("http://privacy.test", {
+    method: "GET",
+	mode: 'cors',
+    headers: {
+        "Content-Type": "application/text"
+    }
+})
+    .then(response => {
+        if (response.status != 200) {
+            return Promise.reject(response);
+        }
+        return response
+    })
+    .then(data => {
+
+		document.getElementById('dnsprivacytest').innerHTML = "<h1>WARNING: DNS PRIVACY MAY BE ENABLED!</h1>";
+
+
+        console.log("Success");
+        console.log(data);
+    })
+    .catch(error => {
+		console.log("Fetch error");
+		console.log(error);
+
+		document.getElementById('dnsprivacytest').innerHTML = "<h1>WARNING: Not connected to privacy WiFi</h1>";
+
+    });
+
+}
+
+fetch("http://githubconnvis.neverssl.com", {
+    method: "GET",
+	mode: 'cors',
+    headers: {
+        "Content-Type": "application/text"
+    }
+})
+    .then(response => {
+        if (response.status != 202) {
+            return Promise.reject(response);
+        }
+        return response
+    })
+    .then(data => {
+        console.log("Success");
+        console.log(data);
+    })
+    .catch(error => {
+		console.log("Fetch error");
+		console.log(error);
+
+
+		checkAny();
+
+    });
+
+
+
+	 </script>
+
 </body>
 </html>
 

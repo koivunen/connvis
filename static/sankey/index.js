@@ -1,4 +1,5 @@
 'use strict';
+var last_error_data;
 
 var colorGenerator = d3.scaleOrdinal(d3.schemeCategory10);
 var layout = d3.sankey()
@@ -75,7 +76,7 @@ async function updateLoop() {
 				link["color"]=interpolate(ageness);
 			}
 			d3.select('#error').text('');
-			d3.select('#containing').text(data.containing=="purged"?"Vain suosituimmat laitteiden yhteiset kohteet":(data.containing=="all"?"Kaikkien laitteiden kaikki kohteet":"Laitteiden yhteiset kohteet"));
+			d3.select('#containing').text(data.containing=="purged"?"(VERY LIMITED) Only popular common destinations":(data.containing=="all"?"All":"(LIMITED) Common connections only"));
 			d3.select('#link_count').text(data.link_count);
 			d3.select('#link_count_visible').text(data.links.length);
 			if (data.links.length==data.link_count) {
