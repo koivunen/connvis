@@ -71,7 +71,10 @@ def onJournalMessage(entry):
 		if domain in config.ignored_domains:
 			return
 		if not "NODATA" in ip and not "NXDOMAIN" in ip:
-			feed(ip,domain)
+			try:
+				feed(ip,domain)
+			except ValueError as e:
+				print("FAILED?",l) #TODO: FAILED? reply 142.250.74.36 is arn09s22-in-f4.1e100.net    FAILED? reply error is SERVFAIL
 		return r
 	
 def seedFromDnsmasq():

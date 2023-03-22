@@ -35,7 +35,7 @@ def sankey():
 
 		hitcount = extra.get("hitcount")
 		if hitcount and hitcount>1:
-			extra["title"] = ("%s (%.0f laitetta)") % (extra["title"],extra["hitcount"])
+			extra["title"] = ("%s (%.0f devices)") % (extra["title"],extra["hitcount"])
 
 		nodes.append(extra)
 

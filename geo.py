@@ -44,6 +44,7 @@ def country(ip):
 import config
 CGN=ipaddress.ip_network("100.64.0.0/10")
 p1=ipaddress.ip_network("10.0.0.0/8")
+p2=ipaddress.ip_network("192.168.0.0/16")
 def asn(ip):
 	
 	ip=ipaddress.ip_address(ip)
@@ -52,6 +53,8 @@ def asn(ip):
 		return (-1,"HOME")
 	if ip in p1:
 		return (-2,"Private 10.x.x.x")
+	if ip in p2:
+		return (-2,"Private 192.168.x.x")
 	if ip.is_private:
 		return (-2,"Local Network")
 	if ip.is_multicast:
@@ -69,7 +72,7 @@ def asn(ip):
 				return (response.autonomous_system_number,"Amazon "+data[0],)
 
 	except:
-		return (0,"ASN-UNKNOWN",)
+		return (0,"ASN-UNKNOWN: "+str(ip),)
 	return (response.autonomous_system_number,response.autonomous_system_organization,)
 
 if __name__ == "__main__":

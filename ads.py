@@ -24,8 +24,6 @@ def init():
 			domain=domain.strip()
 			if domain and " " not in domain:
 				domains[domain]="ad" # todo: ad/tracking/malware/???
-			
-
 
 def classifyIP(ip,check_domains=False):
 	isad = ips.get(int(ip))

@@ -11,3 +11,5 @@ homenetwork = ipaddress.ip_network('192.168.0.0/24')
 homenetwork_router = ipaddress.ip_address('192.168.0.1')
 aggregate_google=True # That is a lot of domains
 ignored_domains=["osoite.local"]
+
+internal_interface="enx000ec6455d8e"

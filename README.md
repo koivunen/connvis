@@ -19,6 +19,7 @@ Connect device(s) to the WiFi network made for connvis and start experimenting.
    - systemd (for dnsmasq journal)
  - hostapd
  - python3.9
+ - Debian Stable / Ubuntu
 
 ## Usage
 1. Become a WiFi router `apt-get install dnsmasq hostapd`, enable forwarding, etc.
@@ -40,6 +41,7 @@ pip3 install -r requirements.txt
 ```
 
 ## TODO
+ - [ ] pyenv / poetry
  - [ ] Per device view of activity / bandwidth
  - [ ] New view: Per device domain resolves alone view
  - [ ] Sankey connection freshness coloring
@@ -64,22 +66,6 @@ Geolocation data provided by https://MaxMind.com and https://lite.ip2location.co
 
 Switched to ethernet-passthrough. Using wireless access point separately.
 
-```bash
-# /etc/sysctl.d/99-connvis.conf
-net.ipv4.ip_forward=1
-#net.ipv6.conf.all.forwarding=1
-net.ipv6.conf.all.disable_ipv6 = 1
-net.ipv6.conf.default.disable_ipv6 = 1
-#net.ipv6.conf.lo.disable_ipv6 = 1
-net.netfilter.nf_conntrack_acct = 1
-
-# Can use both wireless and ethernet for connectivity
-# /etc/iptables/rules.v4
--A POSTROUTING -s 192.168.0.0/24 -o enp12s0 -j MASQUERADE
--A POSTROUTING -s 192.168.1.0/24 -o enp12s0 -j MASQUERADE
--A POSTROUTING -s 192.168.0.0/24 -o wlp2s0 -j MASQUERADE
--A POSTROUTING -s 192.168.1.0/24 -o wlp2s0 -j MASQUERADE
-```
 
 
 ## Copyright
